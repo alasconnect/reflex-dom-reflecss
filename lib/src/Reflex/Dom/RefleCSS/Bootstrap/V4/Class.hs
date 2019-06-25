@@ -114,7 +114,7 @@ buildClass = \case
   AlertDismissable -> "alert-dismissable"
   -- Badge
   Badge c -> "badge " <> contextToText "badge-" c
-  BadgePill c -> "badge badge-pill" <> contextToText "badge-" c
+  BadgePill c -> "badge badge-pill " <> contextToText "badge-" c
   -- Breadcrumb
   Breadcrumb -> "breadcrumb"
   BreadcrumbItem -> "breadcrumb-item"
@@ -194,6 +194,7 @@ buildClass = \case
   InvalidFeedback -> "invalid-feedback"
   ValidTooltip -> "valid-tooltip"
   InvalidTooltip -> "invalid-tooltip"
+  WasValidated -> "was-validated"
   -- Input Group
   InputGroup NoSize -> "input-group"
   InputGroup s -> "input-group input-group" <> sizeToText "-" s

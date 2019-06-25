@@ -3,7 +3,7 @@
 #-}
 {-|
   Module      : Reflex.Dom.RefleCSS.Materialize.V1.Class
-  Description : Extensive ADTs for managing Bootstrap 4 CSS Classes.
+  Description : Opinionated translation of ADT's to manage MaterializeCSS 1 Classes.
 -}
 
 module Reflex.Dom.RefleCSS.Materialize.V1.Class where
@@ -31,75 +31,76 @@ buildClasses l = T.unwords (fmap buildClass l)
 buildClass :: Class -> Text
 buildClass = \case
   -- Layout
-  Container -> "container"
-  ContainerFluid -> "container-fluid"
+  Container -> "container" -- Translated
+  ContainerFluid -> "container-fluid" -- Shimmed
   -- Grid
-  Row -> "row"
-  Col s o -> "col" <> sizeToText "-" s <> breakToText "-" o
-  Offset s o -> "offset" <> sizeToText "-" s <> breakToText "-" o
-  NoGutters -> "no-gutters"
-  Order s o -> "order" <> sizeToText "-" s <> breakToText "-"  o
-  OrderFirst -> "order-first"
-  OrderLast -> "order-last"
+  Row -> "row" -- Translated
+  Col NoSize o -> buildClass (Col ExtraSmall o) -- Translated
+  Col s o -> "col" <> sizeToText " " s <> breakToText "" o -- Translated
+  Offset NoSize o -> buildClass (Offset ExtraSmall o) -- Translated
+  Offset s o -> "offset" <> sizeToText "-" s <> breakToText "" o -- Translated
+  NoGutters -> "no-padding" -- Translated
+  Order _ o -> "order" <> breakToText "-" o -- Shimmed
+  OrderFirst -> "order-first" -- Shimmed
+  OrderLast -> "order-last" -- Shimmed
   -- Visibility
-  Visible -> "visible"
-  Invisible -> "invisible"
+  Visible -> "visible" -- Shimmed
+  Invisible -> "hide" -- Translated
   -- Justify
-  JustifyContent s o -> "justify-content" <> sizeToText "-" s <> justifyToText "-" o
-  Align o -> "align" <> verticalAlignToText "-" o
-  AlignItems s o -> "align-items" <> sizeToText "-" s <> alignToText "-" o
-  AlignSelf s o -> "align-self" <> sizeToText "-" s <> alignToText "-" o
-  AlignContent s o -> "align-content" <> sizeToText "-" s <> alignToText "-" o
+  JustifyContent _ o -> "justify-content" <> justifyToText "-" o -- Shimmed
+  Align o -> "align" <> verticalAlignToText "-" o -- Shimmed
+  AlignItems _ o -> "align-items" <> alignToText "-" o -- Shimmed
+  AlignSelf _ o -> "align-self" <> alignToText "-" o -- Shimmed
+  AlignContent _ o -> "align-content" <> alignToText "-" o -- Shimmed
   -- Sizing
-  W s -> "w" <> percentToText "-" s
-  H s -> "h" <> percentToText "-" s
-  MW s -> "mw" <> percentToText "-" s
-  MH s -> "mh" <> percentToText "-" s
-  VH s -> "vh" <> percentToText "-" s
-  VW s -> "vw" <> percentToText "-" s
-  MinVH s -> "min-vh" <> percentToText "-" s
-  MinVW s -> "min-vw" <> percentToText "-" s
-  M s ExtraSmall g -> "m" <> sideToText s <> gapToText "-" g
-  P s ExtraSmall g -> "p" <> sideToText s <> gapToText "-" g
-  M s z g -> "m" <> sideToText s <> sizeToText "-" z <> gapToText "-" g
-  P s z g -> "p" <> sideToText s <> sizeToText "-" z <> gapToText "-" g
+  W s -> "w" <> percentToText "-" s -- Shimmed
+  H s -> "h" <> percentToText "-" s -- Shimmed
+  MW s -> "mw" <> percentToText "-" s -- Shimmed
+  MH s -> "mh" <> percentToText "-" s -- Shimmed
+  VH s -> "vh" <> percentToText "-" s -- Shimmed
+  VW s -> "vw" <> percentToText "-" s -- Shimmed
+  MinVH s -> "min-vh" <> percentToText "-" s -- Shimmed
+  MinVW s -> "min-vw" <> percentToText "-" s -- Shimmed
+  M s _ g -> "m" <> sideToText s <> gapToText "-" g -- Shimmed
+  P s _ g -> "p" <> sideToText s <> gapToText "-" g -- Shimmed
   -- Image
-  ImgFluid -> "img-fluid"
-  ImgThumbnail -> "img-thumbnail"
+  ImgFluid -> "materialboxed" -- Translated
+  ImgThumbnail -> "materialboxed" -- Translated
   -- Table
-  Table l -> T.unwords (["table"] <> fmap tableToText l)
-  TableResponsive z -> "table-responsive" <> sizeToText "-" z
-  THeadDark -> "thead-dark"
-  THeadLight -> "thead-light"
-  TableContext c -> contextToText "table-" c
+  Table l -> T.unwords (fmap tableToText l) -- Translated
+  TableResponsive _ -> "table-responsive" -- Translated
+  THeadDark -> "thead-dark" -- No Effect
+  THeadLight -> "thead-light" -- No Effect
+  TableContext c -> contextToText "table-" c -- No Effect
   -- Figure
-  Figure -> "figure"
-  FigureImg -> "figure-img"
-  FigureCaption -> "figure-caption"
+  Figure -> "figure" -- No Effect
+  FigureImg -> "figure-img" -- No Effect
+  FigureCaption -> "figure-caption" -- No Effect
   -- Display (Typography)
-  Display1 -> "display-1"
-  Display2 -> "display-2"
-  Display3 -> "display-3"
-  Display4 -> "display-4"
+  Display1 -> "display-1" -- No Effect
+  Display2 -> "display-2" -- No Effect
+  Display3 -> "display-3" -- No Effect
+  Display4 -> "display-4" -- No Effect
   -- Lead
-  Lead -> "lead"
+  Lead -> "lead" -- No Effect
   -- Blockquote
-  Blockquote -> "blockquote"
-  BlockquoteFooter -> "blockquote-footer"
+  Blockquote -> "blockquote" -- No Effect
+  BlockquoteFooter -> "blockquote-footer" -- No Effect
   -- Text
-  TextAlign s o -> "text" <> floatSizeToText "-" s <> textAlignToText "-" o
-  TextWrap -> "text-wrap"
-  TextNowrap -> "text-nowrap"
-  TextTruncate -> "text-truncate"
-  TextBreak -> "text-break"
-  TextMuted -> "text-muted"
-  TextUppercase -> "text-uppercase"
-  TextLowercase -> "text-lowercase"
-  TextCapitalize -> "text-capitalize"
-  TextMonospace -> "text-monospace"
-  TextReset -> "text-reset"
-  TextDecorationNone -> "text-decoration-none"
-  TextContext c -> contextToText "text-" c
+  TextAlign _ o -> textAlignToText o -- Translated
+  TextWrap -> "text-wrap" -- Shimmed
+  TextNowrap -> "text-nowrap" -- Shimmed
+  TextTruncate -> "text-truncate" -- Shimmed
+  TextBreak -> "text-break" -- Shimmed
+  TextMuted -> "text-muted" -- No Effect
+  TextUppercase -> "text-uppercase" -- Shimmed
+  TextLowercase -> "text-lowercase" -- Shimmed
+  TextCapitalize -> "text-capitalize" -- Shimmed
+  TextMonospace -> "text-monospace" -- Shimmed
+  TextReset -> "text-reset" -- Shimmed
+  TextDecorationNone -> "text-decoration-none" -- Shimmed
+  TextContext PrimaryContext -> "" -- Name Clash text-primary from TimePicker
+  TextContext c -> contextToText "text-" c -- No Effect
   -- Font
   FontItalic -> "font-italic"
   FontWeight o -> "font-weight" <> fontWeightToText "-" o
@@ -114,24 +115,23 @@ buildClass = \case
   AlertDismissable -> "alert-dismissable"
   -- Badge
   Badge c -> "badge " <> contextToText "badge-" c
-  BadgePill c -> "badge badge-pill" <> contextToText "badge-" c
+  BadgePill c -> "badge badge-pill " <> contextToText "badge-" c
   -- Breadcrumb
   Breadcrumb -> "breadcrumb"
   BreadcrumbItem -> "breadcrumb-item"
   -- Button
-  Btn NormalButton c z -> "btn" <> " " <> contextToText "btn-" c <> " " <> buttonSizeToText z
-  Btn OutlineButton c z -> "btn" <> " " <> contextToText "btn-outline-" c <> " " <> buttonSizeToText z
-  Btn LinkButton _ z -> "btn btn-link" <> " " <> buttonSizeToText z
+  Btn LinkButton _ z -> "btn-link" <> " " <> buttonSizeToText z -- Shimmed
+  Btn _ c z -> "btn" <> " " <> contextToText "btn-" c <> " " <> buttonSizeToText z -- Translated
   -- Button Group
-  BtnToolbar -> "btn-toolbar"
-  BtnGroup z -> "btn-group" <> " " <> buttonGroupSizeToText z
-  BtnGroupVertical -> "btn-group-vertical"
+  BtnToolbar -> "btn-toolbar" -- No Effect
+  BtnGroup z -> "btn-group" <> " " <> buttonGroupSizeToText z -- Shimmed
+  BtnGroupVertical -> "btn-group-vertical" -- Shimmed
   -- Card
   Card -> "card"
-  CardBody -> "card-body"
+  CardBody -> "card-content"
   CardTitle -> "card-title"
-  CardHeader -> "card-header"
-  CardFooter -> "card-footer"
+  CardHeader -> "card-header" -- No Effect
+  CardFooter -> "card-action"
   CardSubtitle -> "card-subtitle"
   CardText -> "card-text"
   CardImgTop -> "card-img-top"
@@ -160,18 +160,14 @@ buildClass = \case
   DropUp -> "dropup"
   DropRight -> "dropright"
   DropLeft -> "dropleft"
-  DropdownToggle -> "dropdown-toggle"
-  DropdownToggleSplit -> "dropdown-toggle dropdown-toggle-split"
-  DropdownMenu -> "dropdown-menu"
-  DropdownMenuRight ExtraSmall -> "dropdown-menu dropdown-menu-right"
-  DropdownMenuLeft ExtraSmall -> "dropdown-menu dropdown-menu-left"
-  DropdownMenuRight NoSize -> "dropdown-menu dropdown-menu-right"
-  DropdownMenuLeft NoSize -> "dropdown-menu dropdown-menu-left"
-  DropdownMenuRight s -> "dropdown-menu " <> sizeToText "dropdown-menu-" s <> "-right"
-  DropdownMenuLeft s -> "dropdown-menu " <> sizeToText "dropdown-menu-" s <> "-left"
-  DropdownHeader -> "dropdown-header"
+  DropdownToggle -> "dropdown-trigger" -- Shimmed
+  DropdownToggleSplit -> "dropdown-trigger" -- Shimmed
+  DropdownMenu -> "dropdown-content" -- Translated
+  DropdownMenuRight _ -> "dropdown-content" -- Translated
+  DropdownMenuLeft _ -> "dropdown-content" -- Translated
+  DropdownHeader -> "dropdown-header" -- Shimmed
   DropdownItem -> "dropdown-item"
-  DropdownDivider -> "dropdown-divider"
+  DropdownDivider -> "divider" -- Translated
   -- Forms
   FormInline -> "form-inline"
   FormGroup -> "form-group"
@@ -194,6 +190,7 @@ buildClass = \case
   InvalidFeedback -> "invalid-feedback"
   ValidTooltip -> "valid-tooltip"
   InvalidTooltip -> "invalid-tooltip"
+  WasValidated -> "was-validated"
   -- Input Group
   InputGroup NoSize -> "input-group"
   InputGroup s -> "input-group input-group" <> sizeToText "-" s
@@ -201,38 +198,36 @@ buildClass = \case
   InputGroupAppend -> "input-group-append"
   InputGroupText -> "input-group-text"
   -- Jumbotron
-  Jumbotron -> "jumbotron"
-  JumbotronFluid -> "jumbotron jumbotron-fluid"
+  Jumbotron -> "jumbotron" -- No Effect
+  JumbotronFluid -> "jumbotron jumbotron-fluid" -- No Effect
   -- List Group
-  ListGroup -> "list-group"
-  ListGroupFlush -> "list-group list-group-flush"
-  ListGroupHorizontal s -> "list-group list-group-horizontal" <> sizeToText "-" s
-  ListGroupItem NoContext -> "list-group-item"
-  ListGroupItem c -> "list-group-item list-group-item" <> contextToText "-" c
-  ListGroupItemAction -> "list-group-item-action"
+  ListGroup -> "collection"
+  ListGroupFlush -> "collection"
+  ListGroupHorizontal _ -> "collection"
+  ListGroupItem _ -> "collection-item"
+  ListGroupItemAction -> ""
   -- Media
   Media -> "media"
   MediaBody -> "media-body"
   -- Modal
   Modal -> "modal"
-  ModalDialog MediumModal l -> "modal-dialog " <> modalOptionsToText l
-  ModalDialog s l -> "modal-dialog " <> modalSizeToText s <> " " <> modalOptionsToText l
+  ModalDialog s l -> "modal-dialog " <> modalSizeToText s <> " " <> modalOptionsToText l -- No Effect
   ModalContent -> "modal-content"
   ModalHeader -> "modal-header"
-  ModalTitle -> "modal-title"
-  ModalBody -> "modal-body"
+  ModalTitle -> "modal-title float-left"
+  ModalBody -> "modal-body clear-fix" -- Shimmed
   ModalFooter -> "modal-footer"
   -- Nav
-  Nav l -> "nav " <> navOptionsToText l
-  NavItem -> "nav-item"
+  Nav l -> "nav " <> navOptionsToText l -- Translated
+  NavItem -> "collection-item" -- Translated
   NavLink -> "nav-link"
   -- Navbar
   Navbar l -> "navbar " <> navbarOptionsToText l
-  NavbarBrand -> "navbar-brand"
-  NavbarToggler -> "navbar-toggler"
-  NavbarTogglerIcon -> "navbar-toggler-icon"
+  NavbarBrand -> "brand-logo"
+  NavbarToggler -> "sidenav-trigger"
+  NavbarTogglerIcon -> "material-icons"
   NavbarText -> "navbar-text"
-  NavbarCollapse -> "navbar-collapse"
+  NavbarCollapse -> "sidenav"
   NavbarNav -> "navbar-nav"
   -- Tabs
   TabContent -> "tab-content"
@@ -259,17 +254,17 @@ buildClass = \case
   Border o -> borderToText o
   BorderContext c -> "border" <> contextToText "-" c
   -- Display (Visibility)
-  Display s o -> "d" <> displaySizeToText "-" s <> displayToText "-" o
+  Display s o -> "d" <> displaySizeToText "-" s <> displayToText "-" o -- Shimmed
   -- Embed
-  Embed21X9 -> "embed-responsive embed-responsive-21by9"
-  Embed16X9 -> "embed-responsive embed-responsive-16by9"
-  Embed4X3 -> "embed-responsive embed-responsive-4by3"
-  Embed1X1 -> "embed-responsive embed-responsive-1by19"
-  EmbedItem -> "embed-responsive-item"
+  Embed21X9 -> "embed-responsive embed-responsive-21by9" -- No Effect
+  Embed16X9 -> "embed-responsive embed-responsive-16by9" -- No Effect
+  Embed4X3 -> "embed-responsive embed-responsive-4by3" -- No Effect
+  Embed1X1 -> "embed-responsive embed-responsive-1by19" -- No Effect
+  EmbedItem -> "embed-responsive-item" -- No Effect
   -- Float
-  FloatLeft s -> "float" <> floatSizeToText "-" s <> "-left"
-  FloatRight s -> "float" <> floatSizeToText "-" s <> "-right"
-  FloatNone s -> "float" <> floatSizeToText "-" s <> "-none"
+  FloatLeft _ -> "float-left" -- Shimmed
+  FloatRight _ -> "float-right" -- Shimmed
+  FloatNone _ -> "float-none" -- Shimmed
   -- Position
   Position o -> positionToText "-" o
   -- Shadows
@@ -282,7 +277,7 @@ buildClass = \case
   OverflowHidden -> "overflow-hidden"
   TextHide -> "text-hide"
   CloseIcon -> "close"
-  ClearFix -> "clearfix"
+  ClearFix -> "clear-fix" -- Shimmed
   Active -> "active"
   Disabled -> "disabled"
   FixedTop -> "fixed-top"
@@ -291,16 +286,33 @@ buildClass = \case
   Fade -> "fade"
   Show -> "show"
   Slide -> "slide"
-  SROnly -> "sr-only"
-  SROnlyFocusable -> "sr-only-focusable"
+  SROnly -> "sr-only" -- Shimmed
+  SROnlyFocusable -> "sr-only-focusable" -- Shimmed
   FlexNowrap -> "flex-nowrap"
-  Context c -> contextToText "" c
-  Bg c -> contextToText "bg-" c
-  BgGradient c -> contextToText "bg-gradient-" c
+  Context c -> contextToText "" c -- No Effect
+  Bg c -> contextToText "" c -- No Effect
+  BgGradient c -> contextToText "" c -- No Effect
   StretchedLink -> "stretched-link"
-  FlexColumn -> "flex-column"
+  FlexColumn -> "flex-column" -- Shimmed
 
   Custom l -> T.unwords l
+
+contextToText :: Text -> ContextOption -> Text
+contextToText p = \case
+  NoContext -> ""
+  ActiveContext -> p <> "active"
+  PrimaryContext -> p <> "primary"
+  SecondaryContext -> p <> "secondary"
+  SuccessContext -> p <> "success"
+  DangerContext -> p <> "danger"
+  WarningContext -> p <> "warning"
+  InfoContext -> p <> "info"
+  LightContext -> p <> "light"
+  WhiteContext -> p <> "white"
+  DarkContext -> p <> "dark"
+  BlackContext -> p <> "black"
+  TransparentContext -> p <> "transparent"
+  BodyContext -> p <> "body"
 
 verticalAlignToText :: Text -> VerticalAlignOption -> Text
 verticalAlignToText p = \case
@@ -319,11 +331,11 @@ fontWeightToText p = \case
   LightText -> p <> "light"
   DarkText -> p <> "lighter"
 
-textAlignToText :: Text -> TextAlignOption -> Text
-textAlignToText p = \case
-  TextLeft -> p <> "left"
-  TextCenter -> p <> "center"
-  TextRight -> p <> "right"
+textAlignToText :: TextAlignOption -> Text
+textAlignToText = \case
+  TextLeft -> "left-align"
+  TextCenter -> "center-align"
+  TextRight -> "right-align"
 
 positionToText :: Text -> PositionOption -> Text
 positionToText p = \case
@@ -402,10 +414,10 @@ navbarOptionsToText l = T.unwords . ffor l $ \case
 
 navOptionsToText :: [NavOption] -> Text
 navOptionsToText l = T.unwords . ffor l $ \case
-  NavTabs -> "nav-tabs"
-  NavPills -> "nav-pills"
-  NavFill -> "nav-fill"
-  NavJustified -> "nav-justified"
+  NavTabs -> "tabs" -- Translated
+  NavPills -> "collection" -- Translated
+  NavFill -> "nav-fill" -- No Effect
+  NavJustified -> "nav-justified" -- No Effect
 
 modalSizeToText :: ModalSize -> Text
 modalSizeToText = \case
@@ -421,10 +433,10 @@ modalOptionsToText l = T.unwords . ffor l $ \case
 
 buttonSizeToText :: ButtonSizeOption -> Text
 buttonSizeToText = \case
-  MediumButton -> ""
-  SmallButton -> "btn-sm"
-  LargeButton -> "btn-lg"
-  BlockButton -> "btn-block"
+  MediumButton -> "" -- Translated
+  SmallButton -> "btn-small" -- Translated
+  LargeButton -> "btn-large" -- Translated
+  BlockButton -> "btn-block" -- Shimmed
 
 buttonGroupSizeToText :: ButtonGroupSizeOption -> Text
 buttonGroupSizeToText = \case
@@ -432,31 +444,14 @@ buttonGroupSizeToText = \case
   ButtonGroupSmall -> "btn-group-sm"
   ButtonGroupLarge -> "btn-group-lg"
 
-contextToText :: Text -> ContextOption -> Text
-contextToText p = \case
-  NoContext -> ""
-  ActiveContext -> p <> "active"
-  PrimaryContext -> p <> "primary"
-  SecondaryContext -> p <> "secondary"
-  SuccessContext -> p <> "success"
-  DangerContext -> p <> "danger"
-  WarningContext -> p <> "warning"
-  InfoContext -> p <> "info"
-  LightContext -> p <> "light"
-  WhiteContext -> p <> "white"
-  DarkContext -> p <> "dark"
-  BlackContext -> p <> "black"
-  TransparentContext -> p <> "transparent"
-  BodyContext -> p <> "body"
-
 tableToText :: TableOption -> Text
 tableToText = \case
-  TableDark -> "table-dark"
-  TableStriped -> "table-striped"
-  TableBordered -> "table-bordered"
-  TableBorderless -> "table-borderless"
-  TableHover -> "table-hover"
-  TableSmall -> "table-sm"
+  TableDark -> "table-dark" -- No Effect
+  TableStriped -> "striped" --
+  TableBordered -> "table-bordered" -- No Effect
+  TableBorderless -> "table-borderless" -- No Effect
+  TableHover -> "highlight" --
+  TableSmall -> "table-sm" -- No Effect
 
 alignToText :: Text -> AlignOption -> Text
 alignToText p = \case
@@ -505,15 +500,15 @@ percentToText p = \case
   Percent75   -> p <> "75"
   Percent50   -> p <> "50"
   Percent25   -> p <> "25"
-  PercentAuto    -> p <> "auto"
+  PercentAuto -> p <> "auto"
 
 sizeToText :: Text -> SizeOption -> Text
 sizeToText p = \case
   NoSize -> ""
-  ExtraSmall -> p <> "xs"
-  Small -> p <> "sm"
-  Medium -> p <> "md"
-  Large -> p <> "lg"
+  ExtraSmall -> p <> "s"
+  Small -> p <> "m"
+  Medium -> p <> "l"
+  Large -> p <> "xl"
   ExtraLarge -> p <> "xl"
 
 breakToText :: Text -> BreakOption -> Text

@@ -2,7 +2,7 @@
     LambdaCase
 #-}
 {-|
-  Module      : Reflex.Dom.Bootstrap.V4.Class
+  Module      : Reflex.Dom.RefleCSS.Class
   Description : Extensive ADTs for managing CSS Framework Classes.
 -}
 
@@ -11,8 +11,43 @@ module Reflex.Dom.RefleCSS.Class where
 -- Base --
 -- Third Party --
 import Data.Text as T
+import Reflex.Dom
 -- Local --
 -- End Imports --
+
+type FormElement t = InputElement EventResult GhcjsDomSpace t
+
+data InputField
+  = TextField
+  | PasswordField
+  | NumberField
+  | RangeField
+  | SearchField
+  | PhoneField
+  | DateField
+  | DateTimeLocalField
+  | MonthField
+  | EmailField
+  | TimeField
+  | UrlField
+  | WeekField
+  deriving Eq
+
+fieldToText :: InputField -> Text
+fieldToText = \case
+  TextField -> "text"
+  PasswordField -> "password"
+  NumberField -> "number"
+  RangeField -> "range"
+  SearchField -> "search"
+  PhoneField -> "tel"
+  DateField -> "date"
+  DateTimeLocalField -> "datetime-local"
+  MonthField -> "month"
+  EmailField -> "email"
+  TimeField -> "time"
+  UrlField -> "url"
+  WeekField -> "week"
 
 data Class =
     -- Layout
@@ -170,6 +205,7 @@ data Class =
   | InvalidFeedback
   | ValidTooltip
   | InvalidTooltip
+  | WasValidated
     -- Input Group
   | InputGroup SizeOption
   | InputGroupPrepend
@@ -274,11 +310,13 @@ data Class =
   | StretchedLink
     -- Custom
   | Custom [Text]
+  deriving Eq
 
 data ButtonType
   = NormalButton
   | OutlineButton
   | LinkButton
+  deriving Eq
 
 data VerticalAlignOption
   = VerticalBaseline
@@ -287,6 +325,7 @@ data VerticalAlignOption
   | VerticalBottom
   | TextToVerticalTop
   | TextToVerticalBottom
+  deriving Eq
 
 data FontWeightOption
   = BoldText
@@ -294,11 +333,13 @@ data FontWeightOption
   | NormalText
   | LightText
   | DarkText
+  deriving Eq
 
 data TextAlignOption
   = TextLeft
   | TextCenter
   | TextRight
+  deriving Eq
 
 data PositionOption
   = StaticPosition
@@ -306,6 +347,7 @@ data PositionOption
   | AbsolutePosition
   | FixedPosition
   | SitckyPosition
+  deriving Eq
 
 data FloatSize
   = FloatOnAll
@@ -313,6 +355,7 @@ data FloatSize
   | FloatOnMedium
   | FloatOnLarge
   | FloatOnExtraLarge
+  deriving Eq
 
 data BorderOption
   = AllBorders
@@ -335,6 +378,7 @@ data BorderOption
   | NoRounded
   | RoundedSmall
   | RoundedLarge
+  deriving Eq
 
 data DisplayOption
   = DisplayNone
@@ -346,6 +390,7 @@ data DisplayOption
   | DisplayRow
   | DisplayFlex
   | DisplayInlineFlex
+  deriving Eq
 
 data DisplaySize
   = DisplayDefault
@@ -354,17 +399,19 @@ data DisplaySize
   | DisplayOnLarge
   | DisplayOnExtraLarge
   | DisplayOnPrint
+  deriving Eq
 
-data PaginationSize = Paginate | PaginateSmall | PaginateLarge
-data NavOption = NavTabs | NavPills | NavFill | NavJustified
-data ModalSize = MediumModal | SmallModal | LargeModal | ExtraLargeModal
-data ModalOption = ModalCenter | ModalScroll
+data PaginationSize = Paginate | PaginateSmall | PaginateLarge deriving Eq
+data NavOption = NavTabs | NavPills | NavFill | NavJustified deriving Eq
+data ModalSize = MediumModal | SmallModal | LargeModal | ExtraLargeModal deriving Eq
+data ModalOption = ModalCenter | ModalScroll deriving Eq
 
 data ButtonSizeOption
   = SmallButton
   | MediumButton
   | LargeButton
   | BlockButton
+  deriving Eq
 
 data NavbarOption
   = DarkNavbar
@@ -373,11 +420,13 @@ data NavbarOption
   | ExpandMedium
   | ExpandLarge
   | ExpandExtraLarge
+  deriving Eq
 
 data ButtonGroupSizeOption
   = ButtonGroupMedium
   | ButtonGroupSmall
   | ButtonGroupLarge
+  deriving Eq
 
 data ContextOption
   = NoContext
@@ -394,6 +443,7 @@ data ContextOption
   | BlackContext
   | TransparentContext
   | BodyContext
+  deriving Eq
 
 data TableOption
   = TableDark
@@ -402,6 +452,7 @@ data TableOption
   | TableBorderless
   | TableHover
   | TableSmall
+  deriving Eq
 
 data AlignOption
   = AlignStart
@@ -409,6 +460,7 @@ data AlignOption
   | AlignCenter
   | AlignBaseline
   | AlignStretch
+  deriving Eq
 
 data JusitfyOption
   = JusitfyStart
@@ -416,6 +468,7 @@ data JusitfyOption
   | JusitfyCenter
   | JusitfyBetween
   | JusitfyAround
+  deriving Eq
 
 data GapOption
   = Gap0
@@ -430,6 +483,7 @@ data GapOption
   | GapNeg3
   | GapNeg4
   | GapNeg5
+  deriving Eq
 
 data SideOption
   = TopSide
@@ -439,6 +493,7 @@ data SideOption
   | XSides
   | YSides
   | AllSides
+  deriving Eq
 
 data PercentOption
   = Percent100
@@ -446,6 +501,7 @@ data PercentOption
   | Percent50
   | Percent25
   | PercentAuto
+  deriving Eq
 
 data SizeOption
   = NoSize
@@ -454,6 +510,7 @@ data SizeOption
   | Medium
   | Large
   | ExtraLarge
+  deriving Eq
 
 data BreakOption
   = NoBreak
@@ -471,3 +528,4 @@ data BreakOption
   | Break11
   | Break12
   | BreakAuto
+  deriving Eq

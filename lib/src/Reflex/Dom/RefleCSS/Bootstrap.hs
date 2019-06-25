@@ -1,5 +1,5 @@
 {-|
-  Module      : Reflex.Dom.Bootstrap
+  Module      : Reflex.Dom.RefleCSS.Bootstrap
   Description : Re-export latest version of Bootstrap
 -}
 
